@@ -1,0 +1,71 @@
+<label ng-model="oneAtATime">
+    好友管理：
+</label>
+<tabset justified="true">
+    <tab heading="好友">
+        <div class="row">
+            <section ng-controller="friendlist"  style="padding:0 15px; float:none">
+                <accordion  close-others="oneAtATime">
+                    <accordion-group>
+                        <accordion-heading>
+                            {{group.title}}
+                        </accordion-heading>
+                        {{group.content}}
+                    </accordion-group>
+                    <accordion-group  is-open="status.open">
+                        <accordion-heading >
+                            用户好友
+                        </accordion-heading>
+                        <section ng-repeat="item in items track by $index" ng-controller="FriendController">
+                            <li style="list-style: none;" >
+                                <a href="#"
+                                   class="list-group-item"
+                                   context-menu="menuOptions">{{item.name}}<label style="float: right;" ng-class="{'state':item.currentstate}">{{item.state}}</label></a>
+                            </li>
+                        </section>
+                    </accordion-group>
+                </accordion>
+            </section>
+        </div>
+    </tab>
+    <tab heading="我的群">
+        <div class="row">
+            <section ng-controller="grouplist"  style="padding:0 15px; float:none">
+                <accordion  close-others="oneAtATime">
+                    <accordion-group  is-open="status.open" ng-repeat="list in lists track by $index">
+                        <accordion-heading >
+                            {{list.roomName}}
+                        </accordion-heading>
+                        <section ng-repeat="item in list.roomUsers track by $index" ng-controller="GroupController">
+                            <li style="list-style: none;">
+                                <a href="#"
+                                   class="list-group-item"
+                                   context-menu="menuOptions">{{item.user}}<label style="float: right;" ng-class="{'state':item.currentstate}">{{item.state}}</label></a>
+                            </li>
+                        </section>
+                    </accordion-group>
+                </accordion>
+            </section>
+        </div>
+    </tab>
+    <tab heading="所属群">
+        <div class="row">
+            <section ng-controller="affiliation"  style="padding:0 15px; float:none">
+                <accordion  close-others="oneAtATime">
+                    <accordion-group  is-open="status.open">
+                        <accordion-heading >
+                            归属群
+                        </accordion-heading>
+                        <section ng-repeat="item in items track by $index" ng-controller="BelongController">
+                            <li style="list-style: none;">
+                                <a href="#"
+                                   class="list-group-item"
+                                   context-menu="menuOptions">{{item.roomName}}<label style="float: right;" ng-class="{'state':item.ing_state,'state1':item.could_state}">{{item.state}}</label></a>
+                            </li>
+                        </section>
+                    </accordion-group>
+                </accordion>
+            </section>
+        </div>
+    </tab>
+</tabset>

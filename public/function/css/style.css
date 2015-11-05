@@ -1,0 +1,217 @@
+@media (min-width: 1400px) {
+    .Left_func_show {
+        width: 100%; !important;
+        min-width: 1360px;
+    }
+}
+/*@media (min-width: 768px) {
+    .Left_func_show {
+        width: 100%; !important;
+        min-width: 835px;
+    }
+
+}
+@media (min-width: 992px) {
+    .Left_func_show {
+        width: 100%; !important;
+        min-width: 960px;
+    }
+}
+@media (min-width: 1360px) {
+    .Left_func_show {
+        width: 100%; !important;
+        min-width: 1160px;
+    }
+}*/
+
+.friend-file,#sharevideo,#whiteboard,#floatchat{
+    background: #FFFFFF;
+    background: -moz-linear-gradient(0deg, #F5F5F5 0%, #FFF 25%, #FFF 75%, #F5F5F5 100%);
+    background: -ms-linear-gradient(0deg, #F5F5F5 0%, #FFF 25%, #FFF 75%, #F5F5F5 100%);
+    background: -webkit-linear-gradient(0deg, #F5F5F5 0%, #FFF 25%, #FFF 75%, #F5F5F5 100%);
+    background: linear-gradient(0deg, #F5F5F5 0%, #FFF 25%, #FFF 75%, #F5F5F5 100%);
+    border: 1px solid #777777;
+    -moz-border-radius: 6px 6px 6px 6px;
+    -webkit-border-radius: 6px 6px 6px 6px;
+    border-radius: 6px 6px 6px 6px;
+    -moz-box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+    padding: 12px;
+    position: relative;
+}
+#floatchat{
+    display:-webkit-box;
+    display:-ms-flexbox;
+    display:-moz-box;
+}
+/*视频*/
+video {
+    width: 45%;
+}
+/*聊天输入框*/
+#floatchat .input ,#search_friends{
+    -webkit-box-flex:1;
+    -ms-flex:1;
+    -moz-box-flex:1;
+    position: absolute;
+    bottom: 0;
+    width: 90%;
+    vertical-align: middle;
+    height: 28px;
+}
+.input input {
+    margin:0;
+    padding:0 6px;
+    height:28px;
+    width:100%;
+    font-size:14px;
+    background-color: #fbfbfb;
+    border:none;
+    color:#000;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    border-radius:10px;
+    -webkit-box-shadow:0 0 1px #000;
+    -moz-box-shadow: 0 0 1px #000;
+    box-shadow:0 0 1px #000;
+}
+.chat-output{
+    -moz-box-flex:1.0; /* Firefox */
+    -webkit-box-flex:1.0; /* Safari and Chrome */
+    box-flex:1.0;
+    height: 95%;
+    overflow: auto;
+}
+section{
+   margin-top: 2px;
+}
+.service>label,.user>label{
+    width: 100%;
+    font-weight:normal;
+    font-size:12px;
+    color:#999;
+    text-align: center;
+}
+/*The guest*/
+section.service {
+    width: 100%;
+    float: left;
+    text-align: left;
+}
+section.service>div{
+    position:relative;
+    max-width: 75%;
+    display: inline-block;
+    padding:8px;
+    margin:0 20px 0 10px;
+    border-radius:10px;
+    background-color:rgba(167, 219, 221, 0.66);
+    background-image:-moz-linear-gradient(hsla(0,0%,100%, 0.6), hsla(0, 0%, 100%, 0)  30px);
+    background-image:-webkit-gradient(linear, 0 0, 0 30, from(hsla(0, 0%, 100%, 0.6)), to(hsla(0, 0%, 100%, 0)));
+    -moz-box-shadow:1px 1px 2px hsla(0, 0%, 0%, 0.3);
+    -webkit-box-shadow:1px 1px 2px hsla(0, 0%, 0%, 0.3);
+    box-shadow:1px 1px 2px hsla(0, 0%, 0%, 0.3);
+    vertical-align: top;
+    white-space: normal;
+    word-break:break-all;
+}
+section.service>div:before{
+    content:"";
+    position: absolute;
+    left: -5px;
+    top: 4px;
+    width: 0;
+    height: 0;
+    border-width:0 7px 4px 0;
+    border-style:solid;
+    border-color:transparent rgba(167, 219, 221, 0.66) transparent transparent;
+}
+
+.service>span{
+    max-width: 10%;
+    height: 30px;
+    font-weight:normal;
+    font-size:12px;
+    color:#999;
+    overflow: hidden;
+    float: left;
+}
+/*user*/
+section.user{
+    width: 100%;
+    float:right;
+    text-align:right;
+}
+section.user>div{
+    position:relative;
+    max-width: 75%;
+    display: inline-block;
+    padding:8px;
+    margin:0 20px 0 10px;
+    border-radius:10px;
+    background-color:rgba(167, 219, 221, 0.66);
+    background-image:-moz-linear-gradient(hsla(0,0%,100%, 0.6), hsla(0, 0%, 100%, 0)  30px);
+    background-image:-webkit-gradient(linear, 0 0, 0 30, from(hsla(0, 0%, 100%, 0.6)), to(hsla(0, 0%, 100%, 0)));
+    -moz-box-shadow:1px 1px 2px hsla(0, 0%, 0%, 0.3);
+    -webkit-box-shadow:1px 1px 2px hsla(0, 0%, 0%, 0.3);
+    box-shadow:1px 1px 2px hsla(0, 0%, 0%, 0.3);
+    vertical-align: top;
+    white-space: normal;
+    word-break:break-all;
+}
+section.user>div:before{
+    content:"";
+    position: absolute;
+    right: -5px;
+    top: 4px;
+    width: 0;
+    height: 0;
+    border-width:0 0 4px 7px;
+    border-style:solid;
+    border-color:transparent transparent transparent rgba(167, 219, 221, 0.66);
+}
+.user>span{
+    max-width: 10%;
+    height: 30px;
+    font-weight:normal;
+    font-size:12px;
+    color:#999;
+    overflow: hidden;
+    float: right;
+}
+/*好友的状态*/
+.state{
+    color: #00FFFF;
+}
+.state1{
+    color: #80FF00;
+}
+.state2{
+    color: #b92c28;
+}
+/*scrollbar*/
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    border: 5px solid transparent;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: 1px 1px 5px rgba(0,0,0,.2) inset;
+}
+
+::-webkit-scrollbar-thumb {
+    min-height: 20px;
+    background-clip: content-box;
+    box-shadow: 0 0 0 5px rgba(0,0,0,.2) inset;
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
+}

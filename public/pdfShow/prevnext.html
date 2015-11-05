@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body{
+      zoom:100%;
+    }
+    #allscreen{
+      zoom: 100%;
+    }
+  </style>
+</head>
+<body>
+<div>
+  <div id="drawController">
+    <img src = 'resource/image/pencil.png' width = '30px;' height = '30px;' class="img" onclick="draw_graph('pencil',this)" class = 'border_nochoose' title = "pencil"/>
+    <img src = 'resource/image/line.png' width = '30px;' height = '30px;' class="img" onclick="draw_graph('line',this);" class = 'border_nochoose' title = "line"/>
+    <img src = 'resource/image/cancel.png' width = '30px;' height = '30px;' class="img" onclick="cancel(this)" class = 'border_nochoose' title = "cancel"/>
+    <img src = 'resource/image/next.png' width = '30px;' height = '30px;' class="img" onclick="next(this)" class = 'border_nochoose' title = "next"/>
+    <input id="chooseColor" type="button" class = 'i1 border_nochoose' onclick="showColor(this)" title = "chooseColor"/>
+    <img src = 'resource/image/square.png' width = '30px;' height = '30px;' class="img" onclick="draw_graph('square',this)" class = 'border_nochoose' title = "square"/>
+    <img src = 'resource/image/circle.png' width = '30px;' height = '30px;' class="img" onclick="draw_graph('circle',this)" class = 'border_nochoose' title = "circle"/>
+    <img src = 'resource/image/handwriting.png' width = '30px;' height = '30px;' class="img" onclick="draw_graph('handwriting',this)" class = 'border_nochoose' title = handwriting/>
+    <img src = 'resource/image/rubber.png' width = '30px;' height = '30px;' class="img" onclick="draw_graph('rubber',this)" class = 'border_nochoose' title = "rubber"/>
+    <img  id="chooseSize" src = 'resource/image/line_size_1.png'  width = '30px;' height = '30px;' class="img" onclick="showLineSize(this)" class = 'border_nochoose' title = "chooseSize"/>
+    <img src = 'resource/image/xx.png' width = '30px;' height = '30px;' class="img" onclick="clearContext('1')" class = 'border_nochoose' title = "xx"/>
+  </div>
+</div>
+<div id="allscreen">
+  <div style="height:520px;width:800px;margin:0 auto;">
+    <canvas id="the-canvas" width="800" height="520" style="z-index: 3;"></canvas>
+    <canvas id="canvas" width="800" height="520" style="z-index:5;">
+    该浏览器不支持Canvas;
+    </canvas>
+    <canvas id="canvas_bak" width="800" height="520" style="z-index:7;" ></canvas>
+  </div>
+  <div id="color" class="color" >
+    <input class="i1" type="button"/><br/>
+    <input class="i2" type="button"/><br/>
+    <input class="i3" type="button"/><br/>
+    <input class="i4" type="button"/><br/>
+    <input class="i5" type="button"/><br/>
+    <input class="i6" type="button"/><br/>
+    <input class="i7" type="button"/><br/>
+    <input class="i8" type="button"/><br/>
+  </div>
+  <div id="line_size"  class = "the_thick">
+    <img src="resource/image/line_size_1.png" width = '80px;' height = '12px;' onclick="chooseLineSize(1)"><br/>
+    <img src="resource/image/line_size_3.png" width = '80px;' height = '12px;' onclick="chooseLineSize(3)"><br/>
+    <img src="resource/image/line_size_5.png" width = '80px;' height = '12px;' onclick="chooseLineSize(5)"><br/>
+    <img src="resource/image/line_size_7.png" width = '80px;' height = '12px;' onclick="chooseLineSize(7)">
+  </div>
+</div>
+
+<link rel="stylesheet" href="Paint/css/canvas.css"/>
+<link rel="stylesheet" href="Library/bootstrap.min.css"/>
+<script type="text/javascript" src="Library/jquery.min.js"></script>
+<script type="text/javascript" src="Paint/js/pdf.js"></script>
+<script type="text/javascript" src="Paint/js/pdf.worker.js"></script>
+<script type="text/javascript" src="Paint/js/init.js"></script>
+<script type="text/javascript" src="Paint/js/draw.js"></script>
+<script type="text/javascript" src="RTCMultiConnection.js"></script>
+<script id="script">
+  var myscale = 100;
+  var ownPDFurl = "";
+  var pdfDoc = null,
+      pageNum = 1,
+      pageRendering = false,
+      pageNumPending = null,
+      scale = 0.8,
+      canvas = document.getElementById('the-canvas'),
+      canvas1 = document.getElementById('canvas'),
+      canvas_bak = document.getElementById('canvas_bak'),
+      ctx = canvas.getContext('2d');
+
+  /**
+   * Get page info from document, resize canvas accordingly, and render page.
+   * @param num Page number.
+   */
+  function renderPage(num) {
+    pageRendering = true;
+    // Using promise to fetch the page
+    pdfDoc.getPage(num).then(function(page) {
+      var viewport = page.getViewport(scale);
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+ /*     canvas1.height = viewport.height;
+      canvas1.width = viewport.width;
+      canvas_bak.height = viewport.height;
+      canvas_bak.width = viewport.width;*/
+
+      // Render PDF page into canvas context
+      var renderContext = {
+        canvasContext: ctx,
+        viewport: viewport
+      };
+      var renderTask = page.render(renderContext);
+
+      // Wait for rendering to finish
+      renderTask.promise.then(function () {
+        pageRendering = false;
+        if (pageNumPending !== null) {
+          // New page rendering is pending
+          renderPage(pageNumPending);
+          pageNumPending = null;
+        }
+      });
+    });
+
+    // Update page counters
+    //document.getElementById('page_num').textContent = pageNum;
+  }
+
+  /**
+   * If another page rendering in progress, waits until the rendering is
+   * finised. Otherwise, executes rendering immediately.
+   */
+  function queueRenderPage(num) {
+    if (pageRendering) {
+      pageNumPending = num;
+    } else {
+      renderPage(num);
+    }
+  }
+
+
+  function enlarge(){
+    if (myscale <= 150) {
+      myscale += 10;
+      document.getElementById('allscreen').style.zoom = "" + myscale+"%";
+//      document.body.style.zoom = "" + myscale+"%";
+      //renderPage(pageNum);
+    }
+  }
+  function narrow(){
+    if(myscale>=50) {
+      myscale -= 10;
+//      document.body.style.zoom = "" + myscale+"%";
+      document.getElementById('allscreen').style.zoom = "" + myscale+"%";
+    }
+
+  }
+  function onPrevPage(){
+    if (pageNum <= 1) {
+      return;
+    }
+    pageNum--;
+    queueRenderPage(pageNum);
+    //document.getElementById('my_frame').src = canvas.toDataURL();
+  }
+
+  function onNextPage() {
+    if (pageNum >= pdfDoc.numPages) {
+      return;
+    }
+    pageNum++;
+    queueRenderPage(pageNum);
+    //document.getElementById('my_frame').src = canvas.toDataURL();
+  }
+
+
+  /**
+   * Displays previous page.
+   */
+  /**
+   * Asynchronously downloads PDF.
+   */
+  function showpdfcanvas(fileurl){
+    console.log(fileurl);
+    PDFJS.getDocument(fileurl).then(function (pdfDoc_) {
+      pdfDoc = pdfDoc_;
+      console.log(pdfDoc.numPages);
+//      document.getElementById('middle').textContent = ' / ';
+//      document.getElementById('page_count').textContent = pdfDoc.numPages;
+
+      // Initial/first page rendering
+      renderPage(pageNum);
+    });
+  }
+</script>
+
+</body>
+</html>

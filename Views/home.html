@@ -1,0 +1,378 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>在线会议</title>
+    <link rel="stylesheet" href="/function/css/canvas.css"/>
+    <link rel="stylesheet" href="/function/css/style.css"/>
+    <link rel="stylesheet" href="/function/css/chat_animation.css"/>
+    <link rel="stylesheet" href="/components/bootstrap/dist/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="/components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/function/js/chat_animation.js"></script>
+    <script type="text/javascript" src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="/components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="/function/js/init.js"></script>
+    <script type="text/javascript" src="/function/js/draw.js"></script>
+    <script type="text/javascript" src="/function/js/storage.js"></script>
+    <script type="text/javascript" src="/function/js/Left_func.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">导航弹出</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>-->
+                    <a class="navbar-brand" href="#">在线会议</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <form class="navbar-form navbar-right">
+                        <div class="form-group input-group">
+                            <span class="input-group-addon">房间号:</span>
+                            <input type="text" id="session-id" placeholder="roomId" class="form-control">
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle"
+                                    data-toggle="dropdown">
+                                功能<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href='javascript:void(0)' id="open"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;创建房间</a></li>
+                                <li><a href='javascript:void(0)' id="invite_all"><i class="glyphicon glyphicon-comment"></i>&nbsp;&nbsp;一键邀请</a></li>
+                                <li class="divider"></li>
+                                <li id="close"><a><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;&nbsp;关闭房间</a></li>
+                                <li><a id="out_room"><i class="glyphicon glyphicon-log-out"></i>&nbsp;&nbsp;退出房间</a></li>
+                            </ul>
+                        </div>
+                    </form>
+                </div><!--/.navbar-collapse -->
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row Left_func_show">
+            <div class="left_menu">
+                <div id="leftArrow" title="好友&文件">
+                    <span>
+                        <i class="glyphicon glyphicon-user"></i>
+                        <br/>
+                        <font color="#f5f5f5">用户</font>
+                    </span>
+                </div>
+                <div id="leftvideo" title="视频&语音">
+                    <span>
+                        <i class="glyphicon glyphicon-facetime-video"></i>
+                        <br/>
+                        <font color="#f5f5f5">视频</font>
+                    </span>
+                </div>
+            </div>
+            <div class="friend_video" ng-app="left_func">
+                <div class="friend-file" id="friend_file">
+                    <tabset justified="true">
+                        <tab heading="好友">
+                            <div class="" style="">
+                                <div ng-include="'/template/friend.html'"></div>
+                            </div>
+                            <form class="navbar-form navbar-right" id="search_friends" ng-controller="Add_newfriend">
+                                <div class="input-group" >
+                                    <input type="text" class="form-control" placeholder="Name" ng-model="FriendName">
+                                    <span class="input-group-btn">
+                                         <button class="btn btn-default" type="button" ng-click="addFriend()"><i class="glyphicon glyphicon-search"></i>&nbsp;添加</button>
+                                    </span>
+                                </div><!-- /input-group -->
+                            </form>
+                        </tab>
+                        <tab heading="文件">
+                            <div class="" style="height: 70%;overflow: auto;" ng-controller="Share_file" >
+                                <label>公示区:</label>
+                                <button type="button" id="share-file" disabled class="btn btn-primary" style="margin-left: 25%;" ng-click="addItem()">分享文件</button>
+                                <hr/>
+                                <label>文件共享:</label>
+                                <div id="file_area"></div>
+                            </div>
+                        </tab>
+
+                    </tabset>
+                </div>
+                <div class="" id="sharevideo">
+                    <label>视频区:</label>
+                    <hr/>
+                    <div class="video"></div>
+                </div>
+            </div>
+            <div class="main_area">
+                <div class="drawController">
+                    <img src = 'resource/image/pencil.png' width = '30px;' height = '30px;' class="img" onclick="draw_graph('pencil',this)" class = 'border_nochoose' title = "pencil"/>
+                    <img src = 'resource/image/line.png' width = '30px;' height = '30px;' class="img" onclick="draw_graph('line',this);" class = 'border_nochoose' title = "line"/>
+                    <img src = 'resource/image/cancel.png' width = '30px;' height = '30px;' class="img" onclick="cancel(this)" class = 'border_nochoose' title = "cancel"/>
+                    <img src = 'resource/image/next.png' width = '30px;' height = '30px;' class="img" onclick="next(this)" class = 'border_nochoose' title = "next"/>
+                    <input id="chooseColor" type="button" class = 'i1 border_nochoose' onclick="showColor(this)" title = "chooseColor"/>
+                    <img src = 'resource/image/square.png' width = '30px;' height = '30px;' class="img" onclick="draw_graph('square',this)" class = 'border_nochoose' title = "square"/>
+                    <img src = 'resource/image/circle.png' width = '30px;' height = '30px;' class="img" onclick="draw_graph('circle',this)" class = 'border_nochoose' title = "circle"/>
+                    <img src = 'resource/image/handwriting.png' width = '30px;' height = '30px;' class="img" onclick="draw_graph('handwriting',this)" class = 'border_nochoose' title = handwriting/>
+                    <img src = 'resource/image/rubber.png' width = '30px;' height = '30px;' class="img" onclick="draw_graph('rubber',this)" class = 'border_nochoose' title = "rubber"/>
+                    <img  id="chooseSize" src = 'resource/image/line_size_1.png'  width = '30px;' height = '30px;' class="img" onclick="showLineSize(this)" class = 'border_nochoose' title = "chooseSize"/>
+                    <img src = 'resource/image/xx.png' width = '30px;' height = '30px;' class="img" onclick="clearContext('1')" class = 'border_nochoose' title = "xx"/>
+                </div>
+                <div id="color" class="color" >
+                    <input class="i1" type="button"/><br/>
+                    <input class="i2" type="button"/><br/>
+                    <input class="i3" type="button"/><br/>
+                    <input class="i4" type="button"/><br/>
+                    <input class="i5" type="button"/><br/>
+                    <input class="i6" type="button"/><br/>
+                    <input class="i7" type="button"/><br/>
+                    <input class="i8" type="button"/><br/>
+                </div>
+                <div id="line_size"  class = "the_thick">
+                    <img src="resource/image/line_size_1.png" width = '80px;' height = '12px;' onclick="chooseLineSize(1)"><br/>
+                    <img src="resource/image/line_size_3.png" width = '80px;' height = '12px;' onclick="chooseLineSize(3)"><br/>
+                    <img src="resource/image/line_size_5.png" width = '80px;' height = '12px;' onclick="chooseLineSize(5)"><br/>
+                    <img src="resource/image/line_size_7.png" width = '80px;' height = '12px;' onclick="chooseLineSize(7)">
+                </div>
+                <div class="elementToShare" >
+                    <div id="canvas_show">
+                        <canvas id="the-canvas" width="800" height="700" style="z-index: 3;"></canvas>
+                        <canvas id="canvas" width="800" height="700" style="z-index:5;">该浏览器不支持Canvas;</canvas>
+                        <canvas id="canvas_bak" width="800" height="700" style="z-index:7;" ></canvas>
+                    </div>
+                </div>
+                <div class="func_btngroup">
+                    <button id="prevpage" disabled class="btn btn-primary">上一页</button>
+                    <button id="narrow" class="btn btn-primary">缩小</button>
+                    <button id="share-part-of-screen" class="btn btn-info" disabled>屏幕共享</button>
+                    <button type="button" id="post-file" disabled class="btn btn-primary">上传文件</button>
+                    <button id="enlarge" class="btn btn-primary">放大</button>
+                    <button id = "nextpage" disabled class="btn btn-primary">下一页</button>
+                </div>
+            </div>
+            <div class="Chat_area">
+                <div id="rightArrow"><a href="javascript:;" title="聊天"></a></div>
+                <div class="" id="floatchat" style="">
+                    <div class="input">
+                        <input type="text" id="input-text-chat" class="form-control" disabled placeholder="输入文字 Enter发送">
+                    </div>
+                    <div class="chat-output"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<nav class="navbar  navbar-fixed-bottom" style="background-color: rgba(32, 105, 77, 0.48);">-->
+    <footer class="footer">
+        <div class="container">
+            <ul class="nav navbar-nav navbar-right">
+                <li role="presentation" class="">
+                    <a id="logout1"><i class="glyphicon glyphicon-log-out"></i>&nbsp;&nbsp;退出</a>
+                </li>
+            </ul>
+        </div>
+    </footer>
+    <!--</nav>-->
+    <script src="/reliable-signaler/signaler.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/function/js/RTCMultiConnection.js"></script>
+    <script src="/function/js/FileBufferReader.js"></script>
+    <script src="/function/js/share.js"></script>
+    <script src="/pdfShow/pdf.js"></script>
+    <script src="/public/pdfShow/pdf.worker.js"></script>
+    <script id="script">
+        var url = "/pdfShow/testfile.pdf";
+        var myscale = 1.25;
+        var square = 1;
+        var pdfDoc = null,
+                pageNum = 1,
+                pageRendering = false,
+                pageNumPending = null,
+                scale = 0.8,
+                canvas = document.getElementById('the-canvas'),
+                canvas1 = document.getElementById('canvas'),
+                canvas_bak = document.getElementById('canvas_bak'),
+                ctx = canvas.getContext('2d');
+
+        /**
+         * Get page info from document, resize canvas accordingly, and render page.
+         * @param num Page number.
+         */
+        function renderPage(num) {
+            pageRendering = true;
+            // Using promise to fetch the page
+            pdfDoc.getPage(num).then(function(page) {
+                var viewport = page.getViewport(scale);
+//                canvas.height = viewport.height;
+//                canvas.width = viewport.width;
+
+                // Render PDF page into canvas context
+                var renderContext = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+                var renderTask = page.render(renderContext);
+
+                // Wait for rendering to finish
+                renderTask.promise.then(function () {
+                    pageRendering = false;
+                    if (pageNumPending !== null) {
+                        // New page rendering is pending
+                        renderPage(pageNumPending);
+                        pageNumPending = null;
+                    }
+                });
+            });
+
+            // Update page counters
+            //document.getElementById('page_num').textContent = pageNum;
+        }
+
+        /**
+         * If another page rendering in progress, waits until the rendering is
+         * finised. Otherwise, executes rendering immediately.
+         */
+        function queueRenderPage(num) {
+            if (pageRendering) {
+                pageNumPending = num;
+            } else {
+                renderPage(num);
+            }
+        }
+
+        //放大
+        function enlarge(){
+            if(square <= 1.5) {
+                square = square * myscale;
+                var the_canvas = document.getElementById('the-canvas'),
+                        mycanvas = document.getElementById('canvas'),
+                        canvas_bak = document.getElementById('canvas_bak'),
+                        ctx1 = the_canvas.getContext('2d'),
+                        ctx2 = mycanvas.getContext('2d'),
+                        ctx3 = canvas_bak.getContext('2d'),
+                        img1 = new Image(),
+                        img2 = new Image();
+                img1.src = mycanvas.toDataURL();
+                console.log(mycanvas.toDataURL());
+//                var canvasTemp=document.createElement("canvas");
+//                canvasTemp.height = mycanvas.height;
+//                canvasTemp.width = mycanvas.width;
+//                var ctxTemp=canvasTemp.getContext("2d");
+//                ctxTemp.drawImage(mycanvas,0,0);
+                var the_canvas_h = the_canvas.height;
+                var the_canvas_w = the_canvas.width;
+                var mycanvas_h = mycanvas.height;
+                var mycanvas_w = mycanvas.width;
+//                console.log(mycanvas_h+" "+mycanvas_w);
+                var canvas_bak_h = canvas_bak.height;
+                var canvas_bak_w = canvas_bak.width;
+                the_canvas.height = the_canvas.height * myscale;
+                the_canvas.width = the_canvas.width * myscale;
+                mycanvas.height = mycanvas.height * myscale;
+                mycanvas.width = mycanvas.width * myscale;
+//                console.log(mycanvas.height+" "+mycanvas.width);
+                canvas_bak.height = canvas_bak.height * myscale;
+                canvas_bak.width = canvas_bak.width * myscale;
+
+//            ctx.drawImage(img1,0,0,the_canvas_w,the_canvas_h,0,0,mycanvas.width,mycanvas.height);
+//            ctx.drawImage(canvas_bak,0,0,canvas_bak_w,canvas_bak_h,0,0,mycanvas.width,mycanvas.height);
+                ctx2.drawImage(img1, 0, 0, mycanvas_w, mycanvas_h, 0, 0, mycanvas.width, mycanvas.height);
+                ctx1.scale(square, square);
+                ctx2.scale(square, square);
+                ctx3.scale(square, square);
+                renderPage(pageNum);
+            }
+        }
+        //缩小
+        function narrow(){
+            if(square >= 0.9) {
+                square = square/myscale;
+                var the_canvas = document.getElementById('the-canvas'),
+                        mycanvas = document.getElementById('canvas'),
+                        canvas_bak = document.getElementById('canvas_bak'),
+                        ctx1 = the_canvas.getContext('2d'),
+                        ctx2 = mycanvas.getContext('2d'),
+                        ctx3 = canvas_bak.getContext('2d'),
+                        img1 = new Image();
+                var canvasTemp=document.createElement("canvas");
+                canvasTemp.height = mycanvas.height;
+                canvasTemp.width = mycanvas.width;
+                var ctxTemp=canvasTemp.getContext("2d");
+                ctxTemp.drawImage(mycanvas,0,0);
+//                img1.src = mycanvas.toDataURL();
+
+
+                var the_canvas_h = the_canvas.height;
+                var the_canvas_w = the_canvas.width;
+                var mycanvas_h = mycanvas.height;
+                var mycanvas_w = mycanvas.width;
+                var canvas_bak_h = canvas_bak.height;
+                var canvas_bak_w = canvas_bak.width;
+
+                the_canvas.height = the_canvas.height/myscale;
+                the_canvas.width = the_canvas.width/myscale;
+                mycanvas.height = mycanvas.height/myscale;
+                mycanvas.width = mycanvas.width/myscale;
+                canvas_bak.height = canvas_bak.height/myscale;
+                canvas_bak.width = canvas_bak.width/myscale;
+
+
+//            ctx.drawImage(img1,0,0,the_canvas_w,the_canvas_h,0,0,mycanvas.width,mycanvas.height);
+
+//            ctx.drawImage(canvas_bak,0,0,canvas_bak_w,canvas_bak_h,0,0,mycanvas.width,mycanvas.height);
+                ctx2.drawImage(canvasTemp, 0, 0, mycanvas_w, mycanvas_h, 0, 0, mycanvas.width,mycanvas.height);
+                ctx1.scale(square, square);
+                ctx2.scale(square, square);
+                ctx3.scale(square, square);
+                renderPage(pageNum);
+//                console.log("jjjaaja");
+            }
+        }
+        //向上翻页
+        function onPrevPage(){
+            if (pageNum <= 1) {
+                return;
+            }
+            pageNum--;
+            queueRenderPage(pageNum);
+            //document.getElementById('my_frame').src = canvas.toDataURL();
+        }
+
+        function onNextPage() {
+            if (pageNum >= pdfDoc.numPages) {
+                return;
+            }
+            pageNum++;
+            queueRenderPage(pageNum);
+            //document.getElementById('my_frame').src = canvas.toDataURL();
+        }
+
+
+        /**
+         * Displays previous page.
+         */
+        /**
+         * Asynchronously downloads PDF.
+         */
+        function showpdfcanvas(fileurl){
+            //console.log(fileurl);
+            PDFJS.getDocument(url).then(function (pdfDoc_) {
+                pdfDoc = pdfDoc_;
+                // console.log(pdfDoc.numPages);
+//      document.getElementById('middle').textContent = ' / ';
+//      document.getElementById('page_count').textContent = pdfDoc.numPages;
+
+                // Initial/first page rendering
+                renderPage(pageNum);
+            });
+        }
+        showpdfcanvas();
+    </script>
+</body>
+
+</html>
